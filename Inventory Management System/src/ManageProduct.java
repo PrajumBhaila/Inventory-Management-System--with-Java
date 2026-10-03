@@ -52,6 +52,39 @@ public class ManageProduct extends javax.swing.JFrame {
         }
     }
 
+    private boolean validateProductInput() {
+
+        String name = txtName.getText().trim();
+        String quantity = txtQuantity.getText().trim();
+        String price = txtPrice.getText().trim();
+
+        // Product name - letters, numbers and spaces allowed
+        if (!name.matches("[a-zA-Z0-9 ]+")) {
+            JOptionPane.showMessageDialog(null,
+                    "Product name can contain letters and numbers only.");
+            txtName.requestFocus();
+            return false;
+        }
+
+        // Quantity - digits only
+        if (!quantity.matches("[0-9]+")) {
+            JOptionPane.showMessageDialog(null,
+                    "Quantity must contain numbers only.");
+            txtQuantity.requestFocus();
+            return false;
+        }
+
+        // Price - digits with optional decimal value
+        if (!price.matches("[0-9]+(\\.[0-9]+)?")) {
+            JOptionPane.showMessageDialog(null,
+                    "Price must be a valid number.");
+            txtPrice.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -191,6 +224,8 @@ public class ManageProduct extends javax.swing.JFrame {
         String categoryId[] = category.split("-", 0);
         if (validateFields("new")) {
             JOptionPane.showMessageDialog(null, "All fields are required");
+        } else if (!validateProductInput()) {
+            return;
         } else {
             try {
                 Connection con = ConnectionProvider.getCon();
@@ -265,9 +300,11 @@ public class ManageProduct extends javax.swing.JFrame {
         String categoryId[] = category.split("-", 0);
         if (validateFields("edit")) {
             JOptionPane.showMessageDialog(null, "All fields are required");
+        } else if (!validateProductInput()) {
+            return;
         } else {
             try {
-                if(!quantity.equals("")){
+                if (!quantity.equals("")) {
                     totalQuantity = totalQuantity + Integer.parseInt(quantity);
                 }
                 Connection con = ConnectionProvider.getCon();

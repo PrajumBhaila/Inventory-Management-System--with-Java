@@ -39,6 +39,39 @@ public class ManageUser extends javax.swing.JFrame {
         }
     }
 
+    private boolean validateUserInput() {
+
+        String name = txtName.getText().trim();
+        String mobileNumber = txtMobileNumber.getText().trim();
+        String email = txtEmail.getText().trim();
+
+        // Name validation - alphabets and spaces only
+        if (!name.matches("[a-zA-Z ]+")) {
+            JOptionPane.showMessageDialog(null,
+                    "Name must contain alphabets only.");
+            txtName.requestFocus();
+            return false;
+        }
+
+        // Mobile number validation - starts with 97 or 98 and exactly 10 digits
+        if (!mobileNumber.matches("^(97|98)[0-9]{8}$")) {
+            JOptionPane.showMessageDialog(null,
+                    "Mobile number must start with 97 or 98 and contain exactly 10 digits.");
+            txtMobileNumber.requestFocus();
+            return false;
+        }
+
+        // Email validation
+        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            JOptionPane.showMessageDialog(null,
+                    "Please enter a valid email address.");
+            txtEmail.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -107,6 +140,7 @@ public class ManageUser extends javax.swing.JFrame {
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 108, 37, -1));
         getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 130, 315, -1));
 
+        txtMobileNumber.setActionCommand("<Not Set>");
         txtMobileNumber.addActionListener(this::txtMobileNumberActionPerformed);
         getContentPane().add(txtMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 192, 315, -1));
         getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 254, 315, -1));
@@ -200,6 +234,8 @@ public class ManageUser extends javax.swing.JFrame {
 
         if (validateFields("edit")) {
             JOptionPane.showMessageDialog(null, "All field are required");
+        } else if (!validateUserInput()) {
+            return;
         } else {
             try {
                 Connection con = ConnectionProvider.getCon();
@@ -231,6 +267,8 @@ public class ManageUser extends javax.swing.JFrame {
 
         if (validateFields("new")) {
             JOptionPane.showMessageDialog(null, "All field are required");
+        } else if (!validateUserInput()) {
+            return;
         } else {
             try {
                 Connection con = ConnectionProvider.getCon();
@@ -284,10 +322,10 @@ public class ManageUser extends javax.swing.JFrame {
             comboBoxStatus.addItem("Inactive");
             comboBoxStatus.addItem("Active");
         }
-        
+
         txtPassword.setEditable(false);
         txtPassword.setBackground(Color.DARK_GRAY);
-        
+
         btnSave.setEnabled(false);
         btnUpdate.setEnabled(true);
 
