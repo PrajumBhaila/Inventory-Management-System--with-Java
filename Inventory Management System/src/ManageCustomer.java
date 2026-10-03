@@ -34,6 +34,39 @@ public class ManageCustomer extends javax.swing.JFrame {
         }
     }
 
+    private boolean validateCustomerInput() {
+
+        String name = txtName.getText().trim();
+        String mobileNumber = txtMobileNumber.getText().trim();
+        String email = txtEmail.getText().trim();
+
+        // 1. Name validation - alphabets and spaces only
+        if (!name.matches("[a-zA-Z ]+")) {
+            JOptionPane.showMessageDialog(null,
+                    "Name must contain alphabets only.");
+            txtName.requestFocus();
+            return false;
+        }
+
+        // 2. Mobile number validation - starts with 97 or 98 and exactly 10 digits
+        if (!mobileNumber.matches("^(97|98)[0-9]{8}$")) {
+            JOptionPane.showMessageDialog(null,
+                    "Mobile number must start with 97 or 98 and contain exactly 10 digits.");
+            txtMobileNumber.requestFocus();
+            return false;
+        }
+
+        // 3. Email validation
+        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            JOptionPane.showMessageDialog(null,
+                    "Please enter a valid email address.");
+            txtEmail.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -176,6 +209,8 @@ public class ManageCustomer extends javax.swing.JFrame {
 
         if (validateFields()) {
             JOptionPane.showMessageDialog(null, "All fields are required");
+        } else if (!validateCustomerInput()) {
+            return;
         } else {
             try {
                 Connection con = ConnectionProvider.getCon();
@@ -183,7 +218,7 @@ public class ManageCustomer extends javax.swing.JFrame {
                 ps.setString(1, name);
                 ps.setString(2, mobileNumber);
                 ps.setString(3, email);
-                ps.setInt(4,customerPk);
+                ps.setInt(4, customerPk);
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Customer Updated Successfully");
                 setVisible(false);
@@ -193,8 +228,8 @@ public class ManageCustomer extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e);
             }
     }//GEN-LAST:event_btnUpdateActionPerformed
-}
-    
+    }
+
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
         String name = txtName.getText();
@@ -203,6 +238,8 @@ public class ManageCustomer extends javax.swing.JFrame {
 
         if (validateFields()) {
             JOptionPane.showMessageDialog(null, "All fields are required");
+        } else if (!validateCustomerInput()) {
+            return;
         } else {
             try {
                 Connection con = ConnectionProvider.getCon();
