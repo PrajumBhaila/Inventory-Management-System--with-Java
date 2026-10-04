@@ -15,69 +15,92 @@ import javax.swing.table.TableModel;
  *
  * @author Acer
  */
-public class ManageUser extends javax.swing.JFrame {
+  
 
-    private int appuserPk = 0;
+    public class ManageUser extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageUser.class.getName());
+        private int appuserPk = 0;
 
-    /**
-     * Creates new form ManageUser
-     */
-    public ManageUser() {
-        initComponents();
-        setLocationRelativeTo(null);
-    }
+        private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageUser.class.getName());
 
-    private boolean validateFields(String formType) {
-        if (formType.equals("edit") && !txtName.getText().equals("") && !txtMobileNumber.getText().equals("") && !txtEmail.getText().equals("") && !txtAddress.getText().equals("")) {
-            return false;
-        } else if (formType.equals("new") && !txtName.getText().equals("") && !txtMobileNumber.getText().equals("") && !txtEmail.getText().equals("") && !txtAddress.getText().equals("") && !txtPassword.getText().equals("")) {
-            return false;
-        } else {
+        /**
+         * Creates new form ManageUser
+         */
+        public ManageUser() {
+            initComponents();
+            setLocationRelativeTo(null);
+        }
+
+        private boolean isMobileNumberExists(String mobileNumber, int userId) {
+            try {
+                Connection con = ConnectionProvider.getCon();
+
+                PreparedStatement ps = con.prepareStatement(
+                        "SELECT appuser_pk FROM appuser WHERE mobileNumber=? AND appuser_pk<>?"
+                );
+
+                ps.setString(1, mobileNumber);
+                ps.setInt(2, userId);
+
+                ResultSet rs = ps.executeQuery();
+
+                return rs.next();
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+                return true;
+            }
+        }
+
+        private boolean validateFields(String formType) {
+            if (formType.equals("edit") && !txtName.getText().equals("") && !txtMobileNumber.getText().equals("") && !txtEmail.getText().equals("") && !txtAddress.getText().equals("")) {
+                return false;
+            } else if (formType.equals("new") && !txtName.getText().equals("") && !txtMobileNumber.getText().equals("") && !txtEmail.getText().equals("") && !txtAddress.getText().equals("") && !txtPassword.getText().equals("")) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        private boolean validateUserInput() {
+
+            String name = txtName.getText().trim();
+            String mobileNumber = txtMobileNumber.getText().trim();
+            String email = txtEmail.getText().trim();
+
+            // Name validation - alphabets and spaces only
+            if (!name.matches("[a-zA-Z ]+")) {
+                JOptionPane.showMessageDialog(null,
+                        "Name must contain alphabets only.");
+                txtName.requestFocus();
+                return false;
+            }
+
+            // Mobile number validation - starts with 97 or 98 and exactly 10 digits
+            if (!mobileNumber.matches("^(97|98)[0-9]{8}$")) {
+                JOptionPane.showMessageDialog(null,
+                        "Mobile number must start with 97 or 98 and contain exactly 10 digits.");
+                txtMobileNumber.requestFocus();
+                return false;
+            }
+
+            // Email validation
+            if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                JOptionPane.showMessageDialog(null,
+                        "Please enter a valid email address.");
+                txtEmail.requestFocus();
+                return false;
+            }
+
             return true;
         }
-    }
 
-    private boolean validateUserInput() {
-
-        String name = txtName.getText().trim();
-        String mobileNumber = txtMobileNumber.getText().trim();
-        String email = txtEmail.getText().trim();
-
-        // Name validation - alphabets and spaces only
-        if (!name.matches("[a-zA-Z ]+")) {
-            JOptionPane.showMessageDialog(null,
-                    "Name must contain alphabets only.");
-            txtName.requestFocus();
-            return false;
-        }
-
-        // Mobile number validation - starts with 97 or 98 and exactly 10 digits
-        if (!mobileNumber.matches("^(97|98)[0-9]{8}$")) {
-            JOptionPane.showMessageDialog(null,
-                    "Mobile number must start with 97 or 98 and contain exactly 10 digits.");
-            txtMobileNumber.requestFocus();
-            return false;
-        }
-
-        // Email validation
-        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            JOptionPane.showMessageDialog(null,
-                    "Please enter a valid email address.");
-            txtEmail.requestFocus();
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
+        /**
+         * This method is called from within the constructor to initialize the
+         * form. WARNING: Do NOT modify this code. The content of this method is
+         * always regenerated by the Form Editor.
+         */
+        @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -100,6 +123,7 @@ public class ManageUser extends javax.swing.JFrame {
         btnReset = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
         txtPassword = new javax.swing.JTextField();
+        btnDelete = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
 
@@ -177,17 +201,22 @@ public class ManageUser extends javax.swing.JFrame {
         getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 510, -1, -1));
 
         btnReset.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnReset.setText("Reset");
+        btnReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/refresh.png"))); // NOI18N
         btnReset.addActionListener(this::btnResetActionPerformed);
-        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 510, -1, -1));
+        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 30, 30, 30));
 
         btnClose.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnClose.setText("Close");
         btnClose.addActionListener(this::btnCloseActionPerformed);
-        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 510, -1, -1));
+        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 510, -1, -1));
 
         txtPassword.addActionListener(this::txtPasswordActionPerformed);
         getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 390, 310, -1));
+
+        btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(this::btnDeleteActionPerformed);
+        getContentPane().add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 510, 70, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel6.setText("Status");
@@ -214,6 +243,7 @@ public class ManageUser extends javax.swing.JFrame {
         }
 
         btnUpdate.setEnabled(false);
+        btnDelete.setEnabled(false);
     }//GEN-LAST:event_formComponentShown
 
     private void comboBoxStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxStatusActionPerformed
@@ -235,6 +265,11 @@ public class ManageUser extends javax.swing.JFrame {
         if (validateFields("edit")) {
             JOptionPane.showMessageDialog(null, "All field are required");
         } else if (!validateUserInput()) {
+            return;
+        } else if (isMobileNumberExists(mobileNumber, appuserPk)) {
+            JOptionPane.showMessageDialog(null,
+                    "This mobile number is already registered.");
+            txtMobileNumber.requestFocus();
             return;
         } else {
             try {
@@ -268,6 +303,11 @@ public class ManageUser extends javax.swing.JFrame {
         if (validateFields("new")) {
             JOptionPane.showMessageDialog(null, "All field are required");
         } else if (!validateUserInput()) {
+            return;
+        } else if (isMobileNumberExists(mobileNumber, 0)) {
+            JOptionPane.showMessageDialog(null,
+                    "This mobile number is already registered.");
+            txtMobileNumber.requestFocus();
             return;
         } else {
             try {
@@ -328,6 +368,7 @@ public class ManageUser extends javax.swing.JFrame {
 
         btnSave.setEnabled(false);
         btnUpdate.setEnabled(true);
+        btnDelete.setEnabled(true);
 
 
     }//GEN-LAST:event_tableUserMouseClicked
@@ -342,6 +383,32 @@ public class ManageUser extends javax.swing.JFrame {
         // TODO add your handling code here:
         setVisible(false);
     }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+            // TODO add your handling code here:
+            // Check if a user has been selected
+            if (appuserPk == 0) {
+                JOptionPane.showMessageDialog(null, "Please select a user to delete.");
+                return;
+            }
+
+            // Ask for confirmation 
+            int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this user?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    Connection con = ConnectionProvider.getCon();
+                    PreparedStatement ps = con.prepareStatement("DELETE FROM appuser WHERE appuser_pk=?");
+                    ps.setInt(1, appuserPk);
+                    ps.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "User deleted successfully.");
+                    // Refresh the form 
+                    setVisible(false);
+                    new ManageUser().setVisible(true);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e);
+                }
+            }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -370,6 +437,7 @@ public class ManageUser extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;

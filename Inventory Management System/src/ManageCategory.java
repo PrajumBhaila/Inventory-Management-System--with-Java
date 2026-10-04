@@ -137,16 +137,36 @@ public class ManageCategory extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        String name = txtName.getText();
+        String name = txtName.getText().trim();
+
         if (validateFields()) {
-            JOptionPane.showMessageDialog(null, "All field are required");
+            JOptionPane.showMessageDialog(null, "All fields are required");
         } else {
             try {
                 Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("insert into category (name) values (?)");
+
+                // Check if category name already exists
+                PreparedStatement check = con.prepareStatement(
+                        "SELECT * FROM category WHERE name = ?"
+                );
+                check.setString(1, name);
+                ResultSet rs = check.executeQuery();
+
+                if (rs.next()) {
+                    JOptionPane.showMessageDialog(null,
+                            "Category name already exists. Please enter a different name.");
+                    return;
+                }
+
+                // Insert new category
+                PreparedStatement ps = con.prepareStatement(
+                        "INSERT INTO category (name) VALUES (?)"
+                );
                 ps.setString(1, name);
                 ps.executeUpdate();
+
                 JOptionPane.showMessageDialog(null, "Category Added Successfully");
+
                 setVisible(false);
                 new ManageCategory().setVisible(true);
 
@@ -182,17 +202,40 @@ public class ManageCategory extends javax.swing.JFrame {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-        String name = txtName.getText();
+        String name = txtName.getText().trim();
+
         if (validateFields()) {
-            JOptionPane.showMessageDialog(null, "All field are required");
+            JOptionPane.showMessageDialog(null, "All fields are required");
         } else {
             try {
                 Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("update category set name=? where category_pk=?");
+
+                // Check if another category already has this name
+                PreparedStatement check = con.prepareStatement(
+                        "SELECT * FROM category WHERE name = ? AND category_pk != ?"
+                );
+                check.setString(1, name);
+                check.setInt(2, categoryPk);
+
+                ResultSet rs = check.executeQuery();
+
+                if (rs.next()) {
+                    JOptionPane.showMessageDialog(null,
+                            "Category name already exists. Please enter a different name.");
+                    return;
+                }
+
+                // Update category
+                PreparedStatement ps = con.prepareStatement(
+                        "UPDATE category SET name=? WHERE category_pk=?"
+                );
                 ps.setString(1, name);
-                ps.setInt(2,categoryPk);
+                ps.setInt(2, categoryPk);
                 ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Category Updated Successfully");
+
+                JOptionPane.showMessageDialog(null,
+                        "Category Updated Successfully");
+
                 setVisible(false);
                 new ManageCategory().setVisible(true);
 

@@ -123,7 +123,7 @@ public class ManageProduct extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Impact", 1, 36)); // NOI18N
-        jLabel1.setText("ManageCategory");
+        jLabel1.setText("ManageProduct");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(264, 28, 300, -1));
 
         tableProduct.setModel(new javax.swing.table.DefaultTableModel(

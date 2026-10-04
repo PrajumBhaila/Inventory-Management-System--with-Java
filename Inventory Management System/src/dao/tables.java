@@ -25,7 +25,7 @@ public class tables {
             //st.executeUpdate("create table category(category_pk int AUTO_INCREMENT primary key,name varchar(200))");
             // st.executeUpdate("create table product(product_pk int AUTO_INCREMENT primary key,name varchar(200),quantity int,price int,description varchar(500),category_fk int)");
             // st.executeUpdate("create table customer(customer_pk int AUTO_INCREMENT primary key,name varchar(200),mobileNumber varchar(50),email varchar(200))");
-            st.executeUpdate("create table orderDetail(order_pk int AUTO_INCREMENT primary key,orderId varchar(200),customer_fk int,orderDate varchar(200),totalPaid int)");
+            //st.executeUpdate("create table orderDetail(order_pk int AUTO_INCREMENT primary key,orderId varchar(200),customer_fk int,orderDate varchar(200),totalPaid int)");
             JOptionPane.showMessageDialog(null, "Table Created Successfully");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
