@@ -120,7 +120,15 @@ public class ManageOrder extends javax.swing.JFrame {
             new String [] {
                 "ID", "Name", "Mobile Number", "Email"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tableCustomer.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableCustomerMouseClicked(evt);
@@ -141,7 +149,15 @@ public class ManageOrder extends javax.swing.JFrame {
             new String [] {
                 "ID", "Name", "Price", "Quantity", "Description", "Category ID", "Category Name"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tableProduct.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableProductMouseClicked(evt);
@@ -158,7 +174,15 @@ public class ManageOrder extends javax.swing.JFrame {
             new String [] {
                 "Product ID", "Name", "Quantity", "Price", "Description", "Sub Total"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tableCart.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableCartMouseClicked(evt);

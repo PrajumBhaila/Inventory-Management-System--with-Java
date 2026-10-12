@@ -147,7 +147,15 @@ public class ManageUser extends javax.swing.JFrame {
             new String [] {
                 "ID", "Name", "Mobile Number", "Email", "Address", "Status"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tableUser.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableUserMouseClicked(evt);

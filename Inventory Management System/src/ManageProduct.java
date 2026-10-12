@@ -134,6 +134,7 @@ public class ManageProduct extends javax.swing.JFrame {
                 "ID", "Name", "Quantity", "Price", "Description", "Category ID", "Category Name"
             }
         ));
+        tableProduct.setToolTipText("");
         tableProduct.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableProductMouseClicked(evt);

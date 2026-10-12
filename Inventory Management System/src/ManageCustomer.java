@@ -111,7 +111,15 @@ public class ManageCustomer extends javax.swing.JFrame {
             new String [] {
                 "ID", "Name", "Mobile Number", "Email"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tableCustomer.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableCustomerMouseClicked(evt);
