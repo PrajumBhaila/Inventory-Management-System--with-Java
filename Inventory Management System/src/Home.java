@@ -23,7 +23,7 @@ public class Home extends javax.swing.JFrame {
     public Home(String role) {
         initComponents();
         setLocationRelativeTo(null);
-        if(role.equals("Admins")){
+        if(role.equals("Admin")){
             btnUser.setVisible(false);
         }
     }
